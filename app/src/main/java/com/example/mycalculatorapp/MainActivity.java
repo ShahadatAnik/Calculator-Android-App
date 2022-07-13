@@ -7,147 +7,366 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
+
+import java.util.Stack;
+
 public class MainActivity extends AppCompatActivity {
 
-     private EditText display1,display2;
-     private Button dltBtn,sevenBtn,eightBtn,nineBtn,divBtn,
-             fourBtn,fiveBtn,sixBtn,mulBtn,oneBtn,twoBtn,threeBtn,
-             minusBtn,pointBtn,zeroBtn,equalBtn,plusBtn;
+    TextView resultView;
+    TextView equationView;
+    boolean flg=true;
+    boolean flgEqual = false;
+    String tmpResult = "";
 
-     String concat_string = "";
+    public static int precedence(char operator){
+        if(operator == '+' || operator == '-'){
+            return 1;
+        }
+        else{ // for operator == '*' || operator == '/'
+            return 2;
+        }
+    }
+
+    public static double operation(double num1, double num2, char operator){
+        if(operator == '+'){
+            return num1 + num2;
+        }
+        else if(operator == '-'){
+            return num1 - num2;
+        }
+        else if(operator == '*'){
+            return num1 * num2;
+        }
+        else{
+            return num1 / num2;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        display1 = (EditText) findViewById(R.id.editText1);
-        display2 = (EditText) findViewById(R.id.editText2);
-        dltBtn =  findViewById(R.id.button1);
-        sevenBtn =  findViewById(R.id.button2);
-        eightBtn =  findViewById(R.id.button3);
-        nineBtn =  findViewById(R.id.button4);
-        divBtn =  findViewById(R.id.button5);
-        fourBtn =  findViewById(R.id.button6);
-        fiveBtn =  findViewById(R.id.button7);
-        sixBtn =  findViewById(R.id.button8);
-        mulBtn =  findViewById(R.id.button9);
-        oneBtn =  findViewById(R.id.button10);
-        twoBtn =  findViewById(R.id.button11);
-        threeBtn =  findViewById(R.id.button12);
-        minusBtn =  findViewById(R.id.button13);
-        pointBtn =  findViewById(R.id.button14);
-        zeroBtn =  findViewById(R.id.button15);
-        equalBtn =  findViewById(R.id.button16);
-        plusBtn =  findViewById(R.id.button17);
+        equationView = findViewById(R.id.et_input_num);
+        resultView = findViewById(R.id.tv_below_et_input_num);
 
-        display1.setShowSoftInputOnFocus(false);
+        Button btn0 = findViewById(R.id.btn_num_0);
+        Button btn1 = findViewById(R.id.btn_num_1);
+        Button btn2 = findViewById(R.id.btn_num_2);
+        Button btn3 = findViewById(R.id.btn_num_3);
+        Button btn4 = findViewById(R.id.btn_num_4);
+        Button btn5 = findViewById(R.id.btn_num_5);
+        Button btn6 = findViewById(R.id.btn_num_6);
+        Button btn7 = findViewById(R.id.btn_num_7);
+        Button btn8 = findViewById(R.id.btn_num_8);
+        Button btn9 = findViewById(R.id.btn_num_9);
+        Button btnSum = findViewById(R.id.btn_num_plus);
+        Button btnSub = findViewById(R.id.btn_num_minus);
+        Button btnMul = findViewById(R.id.btn_num_multiplication);
+        Button btnDiv = findViewById(R.id.btn_num_devide);
+        Button btnEqual = findViewById(R.id.btn_num_equal);
+        Button btnDot = findViewById(R.id.btn_num_dot);
+        Button btnCLR = findViewById(R.id.btn_clear);
+        Button btnDEL = findViewById(R.id.btn_delete);
 
-        dltBtn.setOnClickListener(v-> concat("dltBtn"));
-        divBtn.setOnClickListener(v-> concat("divBtn"));
-        mulBtn.setOnClickListener(v-> concat("mulBtn"));
-        minusBtn.setOnClickListener(v-> concat("minusBtn"));
-        plusBtn.setOnClickListener(v-> concat("plusBtn"));
 
-        zeroBtn.setOnClickListener(v-> concat("zeroBtn"));
-        oneBtn.setOnClickListener(v-> concat("oneBtn"));
-        twoBtn.setOnClickListener(v-> concat("twoBtn"));
-        threeBtn.setOnClickListener(v-> concat("threeBtn"));
-        fourBtn.setOnClickListener(v-> concat("fourBtn"));
-        fiveBtn.setOnClickListener(v-> concat("fiveBtn"));
-        sixBtn.setOnClickListener(v-> concat("sixBtn"));
-        sevenBtn.setOnClickListener(v-> concat("sevenBtn"));
-        eightBtn.setOnClickListener(v-> concat("eightBtn"));
-        nineBtn.setOnClickListener(v-> concat("nineBtn"));
+        btn0.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "0";
+                equationView.setText(result);
+            }
+        });
 
-        pointBtn.setOnClickListener(v-> concat("pointBtn"));
+        btn1.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "1";
+                equationView.setText(result);
+            }
+        });
 
-        equalBtn.setOnClickListener(v-> result());
+        btn2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "2";
+                equationView.setText(result);
+            }
+        });
 
-    }
+        btn3.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "3";
+                equationView.setText(result);
+            }
+        });
 
-    public void concat (String clickedBtn){
-        switch(clickedBtn) {
-            case "divBtn":
-                concat_string = concat_string + "/";
-                display1.setText(concat_string);
-                break;
-            case "mulBtn":
-                concat_string = concat_string + "x";
-                display1.setText(concat_string);
-                break;
-            case "minusBtn":
-                concat_string = concat_string + "-";
-                display1.setText(concat_string);
-                break;
-            case "plusBtn":
-                concat_string = concat_string + "+";
-                display1.setText(concat_string);
-                break;
-            case "zeroBtn":
-                concat_string = concat_string + "0";
-                display1.setText(concat_string);
-                break;
-            case "oneBtn":
-                concat_string = concat_string + "1";
-                display1.setText(concat_string);
-                break;
-            case "twoBtn":
-                concat_string = concat_string + "2";
-                display1.setText(concat_string);
-                break;
-            case "threeBtn":
-                concat_string = concat_string + "3";
-                display1.setText(concat_string);
-                break;
-            case "fourBtn":
-                concat_string = concat_string + "4";
-                display1.setText(concat_string);
-                break;
-            case "fiveBtn":
-                concat_string = concat_string + "5";
-                display1.setText(concat_string);
-                break;
-            case "sixBtn":
-                concat_string = concat_string + "6";
-                display1.setText(concat_string);
-                break;
-            case "sevenBtn":
-                concat_string = concat_string + "7";
-                display1.setText(concat_string);
-                break;
-            case "eightBtn":
-                concat_string = concat_string + "8";
-                display1.setText(concat_string);
-                break;
-            case "nineBtn":
-                concat_string = concat_string + "9";
-                display1.setText(concat_string);
-                break;
-            case "pointBtn":
-                concat_string = concat_string + ".";
-                display1.setText(concat_string);
-                break;
-            case "dltBtn":
-                if(!concat_string.equals("")){
-                    concat_string = concat_string.substring(0, concat_string.length() - 1);
-                    if(!concat_string.equals("")){
-                        display1.setText(concat_string);
+        btn4.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "4";
+                equationView.setText(result);
+            }
+        });
+
+        btn5.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "5";
+                equationView.setText(result);
+            }
+        });
+
+        btn6.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "6";
+                equationView.setText(result);
+            }
+        });
+
+        btn7.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "7";
+                equationView.setText(result);
+            }
+        });
+
+        btn8.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "8";
+                equationView.setText(result);
+            }
+        });
+
+        btn9.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg || flgEqual){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                result += "9";
+                equationView.setText(result);
+            }
+        });
+
+        btnSum.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg){
+                    equationView.setText("");
+                    flg = false;
+                    flgEqual = false;
+                }
+                String result = equationView.getText().toString();
+                if(result.charAt(result.length()-1) == ' '){
+                    return;
+                }
+                if(flgEqual){
+                    String[] strArr = result.split(" ");
+                    result = strArr[strArr.length-1];
+                    flgEqual = false;
+                }
+                result += " + ";
+                equationView.setText(result);
+            }
+        });
+
+        btnSub.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                if(flg){
+                    equationView.setText("");
+                    flg = false;
+                }
+
+                String result = equationView.getText().toString();
+                if(result.charAt(result.length()-1) == ' '){
+                    return;
+                }
+
+                if(flgEqual){
+                    String[] strArr = result.split(" ");
+                    result = strArr[strArr.length-1];
+                    flgEqual = false;
+                }
+
+                result += " - ";
+                equationView.setText(result);
+            }
+        });
+
+        btnMul.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+
+                String result = equationView.getText().toString();
+                if(result.charAt(result.length()-1) == ' '){
+                    return;
+                }
+                if(flgEqual){
+                    String[] strArr = result.split(" ");
+                    result = strArr[strArr.length-1];
+                    flgEqual = false;
+                }
+                result += " x ";
+                equationView.setText(result);
+            }
+        });
+
+        btnDiv.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                String result = equationView.getText().toString();
+                if(result.charAt(result.length()-1) == ' '){
+                    return;
+                }
+                if(flgEqual){
+                    String[] strArr = result.split(" ");
+                    result = strArr[strArr.length-1];
+                    flgEqual = false;
+                }
+                result += " / ";
+                equationView.setText(result);
+            }
+        });
+
+        btnEqual.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                String result = equationView.getText().toString();
+                // result += " = ";
+                String[] strArr = result.split(" ");
+                //equationView.setText(result);
+
+                if(tmpResult == result || result.charAt(result.length()-1) == ' '){
+                    return;
+                }
+
+                // Infix Evaluation
+                Stack<Double> operands = new Stack<>();
+                operands.push(0.0);
+                Stack<Character> operators = new Stack<>();
+                for(String str: strArr){
+                    if(str.isEmpty()){
+                        continue;
+                    }
+                    //str = str.trim();
+                    if("+".equals(str) || "-".equals(str) || "x".equals(str) || "/".equals(str)){
+                        char ch = str.charAt(0);
+                        if(ch == 'x'){
+                            ch = '*';
+                        }
+                        while(operators.size() > 0 && precedence(ch) <= precedence(operators.peek())){
+                            char operator = operators.pop();
+                            double num2 = operands.pop();
+                            double num1 = operands.pop();
+
+                            double res = operation(num1, num2, operator);
+                            operands.push(res);
+                        }
+                        operators.push(ch);
                     }
                     else{
-                        display1.setText("Enter a value");
+                        //System.out.println(str);
+                        double num = Double.parseDouble(str);
+                        operands.push(num);
                     }
                 }
-                else{
-                    display1.setText("Enter a value");
+
+                while(operators.size() != 0){
+                    char operator = operators.pop();
+                    double num2 = operands.pop();
+                    double num1 = operands.pop();
+
+                    double res = operation(num1, num2, operator);
+                    operands.push(res);
                 }
-                break;
 
-        }
+                //System.out.println(operands.peek());
 
-    }
+                result += " = " + Double.toString(operands.peek());
+                resultView.setText(Double.toString(operands.peek()));
+                tmpResult = result;
+                flgEqual = true;
+            }
+        });
 
-    void result (){
+        btnDot.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                String result = equationView.getText().toString();
+                result += ".";
+                equationView.setText(result);
+            }
+        });
+
+        btnCLR.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                equationView.setText("");
+                resultView.setText("");
+            }
+        });
+
+        btnDEL.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+
+                String result = equationView.getText().toString();
+                if(!result.isEmpty()){
+                    if(result.charAt(result.length()-1) == ' '){
+                        result = result.substring(0, result.length()-3);
+                    }
+                    else{
+                        result = result.substring(0, result.length()-1);
+                    }
+                }
+                equationView.setText(result);
+            }
+        });
 
     }
 
